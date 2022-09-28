@@ -2,7 +2,7 @@
 import { drive_v3 } from "googleapis";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
-import Google, { queryDrive } from "../../../../Logic/Google";
+import Google from "../../../../Logic/Google";
 
 
 
@@ -19,22 +19,20 @@ const handler = nc({
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
 
+    const path = [];
     const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-    const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
-    if (id && pageToken) throw "Dont send fileId and pageToken together";
-    const query: drive_v3.Params$Resource$Files$List = {
-      pageSize: 50, fields:  `files(mimeType, name, id), nextPageToken`
+    
+    const query: drive_v3.Params$Resource$Files$Get = {
+        fields:  `*`, 
+        fileId: id
     };
   
-    if (id) query.q = queryDrive({
-      parents: !!id? id : "root"
-    })
-    else if (pageToken) query.pageToken = pageToken
+ 
 
 
     // SETUP_CLIENT
     
-    const { data } = await Google.Drive_Files_list(query, req, res);
+    const data = await Google.Drive_file_get(query, req, res);
     return res.send(data);
   } catch (error) {
     console.log(error);
@@ -46,3 +44,6 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 export default handler;
+
+
+

@@ -1,16 +1,17 @@
 import React from "react";
 import Axios from "axios";
 import { Col, Button, Drawer, Typography, List, Statistic, notification, Input, Select, Form, Checkbox, Modal } from "antd";
-import GDQT from "search-string-for-google-drive";
 import NextLink from "next/link"
-const query = (params: Query_Term) => GDQT(params);
+import { useRouter } from "next/router";
+
+
 import Google, { drive_v3 } from "googleapis";
 import { FolderTwoTone, FileTwoTone, UnlockTwoTone, DeleteOutlined } from "@ant-design/icons"
 
 
 
 const Page = () => {
-
+    const Router = useRouter()
     const [{ files, nextPageToken }, setParams] = React.useState({
         files: [],
         nextPageToken: ''
@@ -18,32 +19,43 @@ const Page = () => {
 
 
     React.useEffect(() => {
-        Axios({
-            url: "/api/drive/files/list",
-            method: "GET"
-        })
-            .then(({ data }: { data: drive_v3.Schema$FileList }) => {
-                setParams({
-                    files: [...data.files],
-                    nextPageToken: data.nextPageToken
-                })
+        if (Router.isReady) {
+            Axios({
+                url: !Router.query.id || ["undefind", "null"].includes(typeof Router.query.id) ? "/api/drive/files/list" : `/api/drive/files/list?id=${Router.query.id}`,
+                method: "GET"
             })
-    }, [])
+                .then(({ data }: { data: drive_v3.Schema$FileList }) => {
+                    setParams({
+                        files: [...data.files],
+                        nextPageToken: data.nextPageToken
+                    })
+                })
+        }
+    }, [Router])
 
     return <List style={{ maxWidth: "600px", width: "100%", padding: "10px 10px", display: "block", margin: "10px" }} bordered grid={{ column: 1 }} loading={files.length === 0} itemLayout={"vertical"} loadMore={<>{nextPageToken && <Button onClick={getPage}>NEXT Page</Button>}</>} dataSource={files} renderItem={(file: Folder) => {
+        const isFolder = file.mimeType === "application/vnd.google-apps.folder";
         return <Col style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-            <NextLink href={`/files?id=${file.id}`}>
+            {
+                !isFolder && <Typography>
+                {
+                    isFolder ? <FolderTwoTone /> : <FileTwoTone />
+                }
+                {file.name}
+            </Typography>
+            }
+            {isFolder && <NextLink  href={`/explore?id=${file.id}`}>
                 <a style={{ margin: "10px 0" }}>
                     <Typography>
                         {
-                            file.mimeType === "application/vnd.google-apps.folder" ? <FolderTwoTone /> : <FileTwoTone />
+                            isFolder ? <FolderTwoTone /> : <FileTwoTone />
                         }
                         {file.name}
                     </Typography>
                 </a>
 
 
-            </NextLink>
+            </NextLink>}
 
             <div style={{ flex: 1 }}></div>
             <EditAccess id={file.id} />
@@ -77,24 +89,8 @@ export default Page;
 
 
 
-interface Query_Term {
-    isFolder?: Boolean,
-    name?: String,
-    fullText?: String,
-    mimeType?: Array<String> | String,
-    trashed?: false,
-    starred?: true,
-    parents?: String,
-    owners?: String,
-    readers?: String,
-    writers?: String,
-    sharedWithMe?: true,
-    properties?: { x?: Number, y?: Number, z?: Number, when?: String },
-    appProperties?: { paidInBitcoin?: Boolean },
-    visibility?: String,
-}
-
 import { useToggle } from "react-use";
+import { queryDrive } from "../Logic/Google";
 
 interface ERROR {
 
@@ -203,7 +199,7 @@ const AddAccess = () => {
     const [open, toogle] = useToggle(false);
     return <>
         <Button onClick={() => toogle(true)}>Add</Button>
-        <Modal open={open}  onCancel={() => toogle(false)}>
+        <Modal open={open} onCancel={() => toogle(false)}>
             <Select defaultValue="lucy">
                 <Select.Option value="lucy">sss</Select.Option>
                 <Select.Option>sss</Select.Option>

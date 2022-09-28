@@ -56,8 +56,37 @@ class Google {
         return gg
     };
 
+    async Drive_file_get(query: GoogleApi.drive_v3.Params$Resource$Files$Get, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
+        const files = await this.setUP_drive(req, res);
+        const gg = await files.files.get(query)
+        return gg
+    };
+
 
 }
 const GoogleClass = new Google();
 
 export default GoogleClass;
+
+
+interface Query_Term {
+    isFolder?: Boolean,
+    name?: String,
+    fullText?: String,
+    mimeType?: Array<String> | String,
+    trashed?: false,
+    starred?: true,
+    parents?: String,
+    owners?: String,
+    readers?: String,
+    writers?: String,
+    sharedWithMe?: true,
+    properties?: { x?: Number, y?: Number, z?: Number, when?: String },
+    appProperties?: { paidInBitcoin?: Boolean },
+    visibility?: String,
+}
+import GDQT from "search-string-for-google-drive";
+
+const queryDrive = (params: Query_Term) => GDQT(params);
+
+export { queryDrive }
