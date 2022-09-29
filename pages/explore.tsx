@@ -342,8 +342,8 @@ const AddAccess = React.memo(() => {
             })
     }
     return <>
-        <Button style={{ height: "inherit" }} onClick={CreatePermission}>Add</Button>
-        <Modal open={open} onCancel={() => toogle(false)}>
+        <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add</Button>
+        <Modal open={open} onCancel={() => toogle(false)} onOk={CreatePermission}>
             
                 <Form >
                     <form onSubmit={CreatePermission}>
