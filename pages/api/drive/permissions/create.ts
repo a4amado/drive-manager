@@ -20,27 +20,27 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
 
 
-        const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-        const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
+        const email = Array.isArray(req.query.emailAddress) ? req.query.emailAddress[0] : req.query.emailAddress;
+        const role = Array.isArray(req.query.role) ? req.query.role[0] : req.query.role;
+        
 
         const query: Google.drive_v3.Params$Resource$Permissions$Create = {
 
             fields: "*",
             requestBody: {
-                emailAddress: "",
-                role: "",
-                type: ""
+                emailAddress: email,
+                role: role
             },
             emailMessage: "Let's Dance Baby!"
 
 
         };
-        if (id && pageToken) throw "Dont send fileId and pageToken together";
+        
 
 
 
 
-        const { data } = await GoogleClass.Drive_Permission_list(query, req, res);
+        const { data } = await GoogleClass.Drive_Permissions_Create(query, req, res);
         res.send(data);
     } catch (error) {
         res.status(500).send(error);

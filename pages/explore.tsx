@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEventHandler } from "react";
 import Axios from "axios";
 import { List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Collapse } from "antd";
 import NextLink from "next/link"
@@ -77,10 +77,10 @@ const Page = ({ data }) => {
     });
     // const dd = useSWR("getFiles", {
     //     fetcher: fetch({ method: "GET", url: `/api/drive/files/list?pageToken=${nextPageToken}` }),
-        
-        
+
+
     // });
-    
+
     React.useEffect(() => {
 
         if (data?.files?.length === 0) {
@@ -107,7 +107,7 @@ const Page = ({ data }) => {
         <Typography style={{ width: "100%", textAlign: "center", fontSize: "35px", fontWeight: "bold", flex: 0 }}>Drive Manager</Typography>
 
         <List
-            
+
             style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
             dataSource={files}
             renderItem={(item: drive_v3.Schema$File) => <FileItem data={item} />}
@@ -128,7 +128,7 @@ const Page = ({ data }) => {
                 files: [...files, ...data.files],
                 nextPageToken: data.nextPageToken
             })
-            
+
         })
     }
 
@@ -158,8 +158,8 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
         {
             !isFolder && <Typography style={{ height: "inherit", flex: 1, background: "rgba(0,0,0,0.1)", alignContent: "center", display: "flex", flexDirection: "row", alignItems: "center" }}>
                 <strong>
-                <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
-                {data.name}
+                    <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
+                    {data.name}
                 </strong>
             </Typography>
 
@@ -169,7 +169,7 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
                 <a style={{ margin: "10px 0" }}>
 
                     <Typography >
-                        <strong><FolderTwoTone style={{ fontSize: "20px", margin: "0 10px"  }} />
+                        <strong><FolderTwoTone style={{ fontSize: "20px", margin: "0 10px" }} />
                             {data.name}
                         </strong>
                     </Typography>
@@ -271,11 +271,11 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
                 bordered
                 header={<Input value={text} onChange={(e) => setText(e.target.value)} />}
                 loading={!error && permissions.length === 0}
-                >
+            >
 
                 {
                     filterdPermissions
-                        .sort((a: drive_v3.Schema$Permission, b: drive_v3.Schema$Permission) => 
+                        .sort((a: drive_v3.Schema$Permission, b: drive_v3.Schema$Permission) =>
                             (a.emailAddress[0].localeCompare(b.emailAddress[0]))
                         )
                         .map((file: drive_v3.Schema$Permission) => <PermissionItem data={file} />)
@@ -324,25 +324,46 @@ const gg = [{
 
 const AddAccess = React.memo(() => {
     const [open, toogle] = useToggle(false);
+    const [emailAdress, setEmailAdress] = React.useState("");
+    const [role, setRole] = React.useState("reader");
+    function CreatePermission(e: React.FormEvent) {
+            e.preventDefault()
+            
+            Axios({
+                method: "POST",
+                url: `/api/drive/permissions/create?emailAdress=${emailAdress}&role=${role}`
+            }).then(() => {
+                setEmailAdress("");
+                setRole("");
+                notification["success"]({
+                    message: "Permission Assigned Succesfully"
+                });
+            })
+    }
     return <>
         <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add</Button>
         <Modal open={open} onCancel={() => toogle(false)}>
-            <Form>
-                <Form.Item>
-                    <label>User Type</label>
-                    <Select defaultValue="reader">
-                        {
-                            gg.map((f) => <Select.Option key={f.value} value={f.value}>{f.lable}</Select.Option>)
-                        }
+            
+                <Form >
+                    <form onSubmit={CreatePermission}>
+                    <Form.Item>
+                        <label>User Type</label>
+                        <Select defaultValue="reader" value={role} onChange={setRole}>
+                            {
+                                gg.map((f) => <Select.Option key={f.value} value={f.value}>{f.lable}</Select.Option>)
+                            }
 
-                    </Select>
-                </Form.Item>
-                <Form.Item>
-                    <label>Email</label>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item>
+                        <label>Email</label>
 
-                    <Input type="email" />
-                </Form.Item>
-            </Form>
+                        <Input type="email" value={emailAdress} onChange={e => setEmailAdress(e.target.value)}/>
+                    </Form.Item>
+                    </form>
+                </Form>
+            
+            <Typography>set {emailAdress} as {role}</Typography>
         </Modal>
     </>
 })
