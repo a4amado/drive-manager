@@ -118,8 +118,11 @@ const Page = ({ data }) => {
         Axios({
             method: "GET",
             url: `/api/drive/files/list?pageToken=${nextPageToken}`
-        }).then((e) => {
-            console.log(e);
+        }).then(({ data }: { data: drive_v3.Schema$FileList }) => {
+            setParams({
+                files: [...files, ...data.files],
+                nextPageToken: data.nextPageToken
+            })
             
         })
     }
