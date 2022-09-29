@@ -1,4 +1,3 @@
-import 'react-virtualized/styles.css';
 import '../styles/index.css';
 import 'antd/dist/antd.css';
 import "nprogress/nprogress.css";
