@@ -23,8 +23,11 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
     if (id && pageToken) throw "Dont send fileId and pageToken together";
     const query: drive_v3.Params$Resource$Files$List = {
-      pageSize: 50, fields:  `files(mimeType, name, id), nextPageToken`
+      pageSize: 50, fields:  `files(mimeType, name, id, webViewLink, iconLink), nextPageToken`,
+      
     };
+
+    
   
     if (id) query.q = queryDrive({
       parents: !!id? id : "root"
