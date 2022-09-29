@@ -108,6 +108,7 @@ const Page = ({ data }) => {
             renderItem={(item: drive_v3.Schema$File) => <FileItem data={item} />}
             bordered
             loadMore={nextPageToken && <Button onClick={getPage}>LoadMore</Button>}
+            loading={files.length === 0}
         />
 
     </Row>
