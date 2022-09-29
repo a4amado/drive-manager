@@ -71,11 +71,11 @@ const Page = ({ data }) => {
         files: [],
         nextPageToken: ""
     });
-    const dd = useSWR("getFiles", {
-        fetcher: fetch({ method: "GET", url: `/api/drive/files/list?pageToken=${nextPageToken}` }),
+    // const dd = useSWR("getFiles", {
+    //     fetcher: fetch({ method: "GET", url: `/api/drive/files/list?pageToken=${nextPageToken}` }),
         
         
-    });
+    // });
     
     React.useEffect(() => {
 
@@ -112,6 +112,16 @@ const Page = ({ data }) => {
 
     </Row>
 
+
+    function getPage() {
+        Axios({
+            method: "GET",
+            url: `/api/drive/files/list?pageToken=${nextPageToken}`
+        }).then((e) => {
+            console.log(e);
+            
+        })
+    }
 
 
 
