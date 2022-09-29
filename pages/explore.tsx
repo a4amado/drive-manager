@@ -62,12 +62,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 }
 
+interface FilesState {
+    files: Array<drive_v3.Schema$File>,
+    nextPageToken: string | null
+}
 
 const Page = ({ data }) => {
 
 
     const Router = useRouter()
-    const [{ files, nextPageToken }, setParams] = React.useState<any>({
+    const [{ files, nextPageToken }, setParams] = React.useState<FilesState>({
         files: [],
         nextPageToken: ""
     });
@@ -201,7 +205,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 
 const EditAccess = React.memo(({ id }: { id: String }) => {
     const [error, setError] = useToggle(false);
-    const [permissions, setPermissions] = React.useState<Array<drive_v3.Schema$PermissionList>>([]);
+    const [permissions, setPermissions] = React.useState<Array<drive_v3.Schema$Permission>>([]);
 
     const [filterdPermissions, setFilterdPermissions] = React.useState<Array<drive_v3.Schema$PermissionList>>([...permissions]);
     React.useEffect(() => {
@@ -270,7 +274,11 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
                 >
 
                 {
-                    filterdPermissions.map((file: drive_v3.Schema$Permission) => <PermissionItem data={file} />)
+                    filterdPermissions
+                        .sort((a: drive_v3.Schema$Permission, b: drive_v3.Schema$Permission) => 
+                            (a.emailAddress[0].localeCompare(b.emailAddress[0]))
+                        )
+                        .map((file: drive_v3.Schema$Permission) => <PermissionItem data={file} />)
                 }
 
 
