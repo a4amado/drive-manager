@@ -103,6 +103,7 @@ const Page = ({ data }) => {
         <Typography style={{ width: "100%", textAlign: "center", fontSize: "35px", fontWeight: "bold", flex: 0 }}>Drive Manager</Typography>
 
         <List
+            
             style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
             dataSource={files}
             renderItem={(item: drive_v3.Schema$File) => <FileItem data={item} />}
