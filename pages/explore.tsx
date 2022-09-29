@@ -338,10 +338,11 @@ const AddAccess = React.memo(() => {
                 notification["success"]({
                     message: "Permission Assigned Succesfully"
                 });
+                toogle(false)
             })
     }
     return <>
-        <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add</Button>
+        <Button style={{ height: "inherit" }} onClick={CreatePermission}>Add</Button>
         <Modal open={open} onCancel={() => toogle(false)}>
             
                 <Form >
