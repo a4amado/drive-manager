@@ -193,7 +193,6 @@ export default Page;
 import { useToggle } from "react-use";
 import GoogleClass, { queryDrive } from "../Logic/Google";
 import { authOptions } from "./api/auth/[...nextauth]";
-import useSWR from "swr";
 
 const EditAccess = React.memo(({ id }: { id: String }) => {
     const [error, setError] = useToggle(false);
@@ -258,7 +257,12 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
         >
 
 
-            <List style={{ padding: "0 10px" }} bordered header={<Input value={text} onChange={(e) => setText(e.target.value)} />}>
+            <List
+                style={{ padding: "0 10px" }}
+                bordered
+                header={<Input value={text} onChange={(e) => setText(e.target.value)} />}
+                loading={!error && permissions.length === 0}
+                >
 
                 {
                     filterdPermissions.map((file: drive_v3.Schema$Permission) => <PermissionItem data={file} />)
