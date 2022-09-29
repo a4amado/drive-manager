@@ -109,7 +109,7 @@ const Page = ({ data }) => {
         <List
             
             style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
-            dataSource={files}
+            dataSource={files.sort((a,b) => a.name[0].localeCompare(b.name[0]))}
             renderItem={(item: drive_v3.Schema$File) => <FileItem data={item} />}
             bordered
             loadMore={nextPageToken && <Button onClick={getPage}>LoadMore</Button>}
