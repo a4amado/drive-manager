@@ -324,16 +324,16 @@ const gg = [{
 
 const AddAccess = React.memo(() => {
     const [open, toogle] = useToggle(false);
-    const [emailAdress, setEmailAdress] = React.useState("");
+    const [emailAddress, setEmailAddress] = React.useState("");
     const [role, setRole] = React.useState("reader");
     function CreatePermission(e: React.FormEvent) {
             e.preventDefault()
             
             Axios({
                 method: "POST",
-                url: `/api/drive/permissions/create?emailAdress=${emailAdress}&role=${role}`
+                url: `/api/drive/permissions/create?emailAddress=${emailAddress}&role=${role}`
             }).then(() => {
-                setEmailAdress("");
+                setEmailAddress("");
                 setRole("");
                 notification["success"]({
                     message: "Permission Assigned Succesfully"
@@ -359,12 +359,12 @@ const AddAccess = React.memo(() => {
                     <Form.Item>
                         <label>Email</label>
 
-                        <Input type="email" value={emailAdress} onChange={e => setEmailAdress(e.target.value)}/>
+                        <Input type="email" value={emailAddress} onChange={e => setEmailAddress(e.target.value)}/>
                     </Form.Item>
                     </form>
                 </Form>
             
-            <Typography>set {emailAdress} as {role}</Typography>
+            <Typography>set {emailAddress} as {role}</Typography>
         </Modal>
     </>
 })
