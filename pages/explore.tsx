@@ -185,7 +185,7 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
         <Button style={{ height: "inherit" }}>
             {/* @ts-ignore */}
             <a target="_blank" href={data.webViewLink}>
-                open in Drive
+                open
             </a>
         </Button>
         <EditAccess id={data.id} />
@@ -248,7 +248,7 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
     }, [open])
 
     return <>
-        <Button type="primary" style={{ height: "inherit" }} onClick={() => toogle(true)}> <UnlockTwoTone /> Edit Access</Button>
+        <Button type="primary" style={{ height: "inherit" }} onClick={() => toogle(true)}> <UnlockTwoTone />Edit</Button>
         <Drawer
             size="large"
             open={open}
