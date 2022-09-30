@@ -1,10 +1,10 @@
 import '../styles/index.css';
 import 'antd/dist/antd.css';
 import "nprogress/nprogress.css";
-
+import { Suspense } from "react"
 import React from "react";
 import { SessionProvider } from "next-auth/react"
-import  NProgress from "nprogress";
+import NProgress from "nprogress";
 import Router from 'next/router';
 NProgress.configure({
     showSpinner: true
@@ -19,11 +19,13 @@ Router.events.on("routeChangeComplete", () => {
 
 
 const MyApp = ({ Component, pageProps }: any) => {
-    return <SessionProvider session={pageProps?.session}> 
-    
-    <Component {...pageProps}/>
-    
-    </SessionProvider>
+    return <Suspense fallback={<h1>Loading</h1>}>
+        <SessionProvider session={pageProps?.session}>
+
+            <Component {...pageProps} />
+
+        </SessionProvider>
+    </Suspense>
 };
 
 
