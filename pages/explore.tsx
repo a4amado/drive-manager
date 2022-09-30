@@ -1,6 +1,6 @@
 import React, { FormEventHandler } from "react";
 import Axios, { AxiosError } from "axios";
-import { List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Menu, Dropdown } from "antd";
+import { Col, List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Menu, Dropdown } from "antd";
 import NextLink from "next/link"
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
@@ -107,10 +107,11 @@ const Page = ({ data }) => {
         <Typography style={{ width: "100%", textAlign: "center", fontSize: "35px", fontWeight: "bold", flex: 0 }}>Drive Manager</Typography>
 
         <List
-
-            style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
+        
+            style={{ width: "100%", maxWidth: "800px", margin: "0 auto", padding: "5px 5px", gap: "10px" }}
             dataSource={files}
-            renderItem={(item: drive_v3.Schema$File) => <FileItem data={item} />}
+            grid={{column: 1}}
+            renderItem={(item: drive_v3.Schema$File, i) => <FileItem data={item} i={i}/>}
             bordered
             loadMore={nextPageToken && <Button onClick={getPage}>LoadMore</Button>}
             loading={files.length === 0}
@@ -136,51 +137,26 @@ const Page = ({ data }) => {
 
 
 };
-const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
-
+const FileItem = React.memo(({ data, i }: { data: drive_v3.Schema$File, i: number }) => {
+    const [hover, setHover] = useToggle(false);
     const isFolder = data.mimeType === "application/vnd.google-apps.folder";
     
 
     // @ts-ignore
-    return <div
+    return <Col
         style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
             width: "100%",
             maxWidth: "800px",
-            margin: "5px 0",
+            background: `${i%2===0?"rgba(0,0,0,0.1)":""}`,
             height: "40px",
             gap: "10px",
 
         }}
         key={data.id}>
-        {
-            !isFolder && <Typography style={{ height: "inherit", flex: 1, background: "rgba(0,0,0,0.1)", alignContent: "center", display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <strong>
-                    <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
-                    {data.name}
-                </strong>
-            </Typography>
-
-        }
-        {isFolder && <Typography style={{ height: "inherit", flex: 1, background: "rgba(0,0,0,0.1)", alignContent: "center", display: "flex" }}>
-            <NextLink href={`/explore?id=${data.id}`}>
-                <a style={{ margin: "10px 0" }}>
-
-                    <Typography >
-                        <strong><FolderTwoTone style={{ fontSize: "20px", margin: "0 10px" }} />
-                            {data.name}
-                        </strong>
-                    </Typography>
-
-                </a>
-            </NextLink>
-        </Typography>}
-
-
-
-
+            
         <Dropdown  autoFocus arrow placement="topLeft" trigger={["click"]} overlay={
             <Menu 
             items={[
@@ -201,13 +177,41 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
                 
             ]}/>
             }>
-            <SettingFilled />
+            <Row style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "55px", background:"rgba(0,0,0,0.1)" }}>
+            <SettingFilled style={{ fontSize: "20px"}} />
+            </Row>
         </Dropdown>
+        {
+            !isFolder && <Typography style={{ height: "inherit", flex: 1, alignContent: "center", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <strong>
+                    <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
+                    {data.name}
+                </strong>
+            </Typography>
+
+        }
+        {isFolder && <Typography style={{ height: "inherit", flex: 1, alignContent: "center", display: "flex" }}>
+            <NextLink href={`/explore?id=${data.id}`}>
+                <a style={{ margin: "10px 0" }}>
+
+                    <Typography >
+                        <strong><FolderTwoTone style={{ fontSize: "20px", margin: "0 10px" }} />
+                            {data.name}
+                        </strong>
+                    </Typography>
+
+                </a>
+            </NextLink>
+        </Typography>}
 
 
 
 
-    </div>
+
+
+
+
+    </Col>
 })
 
 
