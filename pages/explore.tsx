@@ -1,11 +1,11 @@
 import React, { FormEventHandler } from "react";
 import Axios, { AxiosError } from "axios";
-import { List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Collapse } from "antd";
+import { List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Menu, Dropdown } from "antd";
 import NextLink from "next/link"
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { drive_v3 } from "googleapis";
-import { FolderTwoTone, UnlockTwoTone, FileFilled } from "@ant-design/icons"
+import { FolderTwoTone, UnlockTwoTone, FileFilled, SettingFilled } from "@ant-design/icons"
 import { unstable_getServerSession } from "next-auth";
 
 
@@ -139,7 +139,7 @@ const Page = ({ data }) => {
 const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
 
     const isFolder = data.mimeType === "application/vnd.google-apps.folder";
-
+    
 
     // @ts-ignore
     return <div
@@ -181,15 +181,32 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
 
 
 
+        <Dropdown autoFocus arrow placement="topLeft" trigger={["click"]} overlay={
+            <Menu 
+            items={[
+                {
+                    label: (<a target="_blank" href={data.webViewLink}>Open</a>),
+                    key: '0',
+                },
+                {
+                    label: (<EditAccess id={data.id} />),
+                    key: '1'
+                },
+                {
+                    label:(<AddAccess id={data.id} />),
+                    key: '2'
+                },  
+                
+                
+                
+            ]}/>
+            }>
+            <SettingFilled />
+        </Dropdown>
 
-        <Button style={{ height: "inherit" }}>
-            {/* @ts-ignore */}
-            <a target="_blank" href={data.webViewLink}>
-                open
-            </a>
-        </Button>
-        <EditAccess id={data.id} />
-        <AddAccess id={data.id} />
+
+
+
     </div>
 })
 
@@ -248,7 +265,7 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
     }, [open])
 
     return <>
-        <Button type="primary" style={{ height: "inherit" }} onClick={() => toogle(true)}> <UnlockTwoTone />Edit</Button>
+        <Button type="primary" style={{ height: "inherit" }} onClick={() => toogle(true)}> <UnlockTwoTone />Edit Permissons</Button>
         <Drawer
             size="large"
             open={open}
@@ -314,33 +331,33 @@ const AddAccess = React.memo(({ id }: { id: String }) => {
     const [emailAddress, setEmailAddress] = React.useState("");
     const [role, setRole] = React.useState("reader");
     function CreatePermission(e: React.FormEvent) {
-            e.preventDefault()
-            toogleLoading(true)
-            Axios({
-                method: "POST",
-                url: `/api/drive/permissions/create?emailAddress=${emailAddress}&role=${role}&fileID=${id}`
-            }).then(() => {
-                setEmailAddress("");
-                setRole("");
-                notification["success"]({
-                    message: "Permission Assigned Succesfully"
-                });
-                toogle(false)
-            }).catch((err: AxiosError) => {
-                // @ts-ignore
-                err.response.data?.errors.map((error) => {
+        e.preventDefault()
+        toogleLoading(true)
+        Axios({
+            method: "POST",
+            url: `/api/drive/permissions/create?emailAddress=${emailAddress}&role=${role}&fileID=${id}`
+        }).then(() => {
+            setEmailAddress("");
+            setRole("");
+            notification["success"]({
+                message: "Permission Assigned Succesfully"
+            });
+            toogle(false)
+        }).catch((err: AxiosError) => {
+            // @ts-ignore
+            err.response.data?.errors.map((error) => {
                 notification["error"]({
                     message: error?.message || "Something weng wrong"
                 });
             })
-            })
+        })
     }
     return <>
-        <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add</Button>
+        <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add User</Button>
         <Modal open={open} onCancel={() => toogle(false)} >
-            
-                <Form >
-                    <form onSubmit={CreatePermission}>
+
+            <Form >
+                <form onSubmit={CreatePermission}>
                     <Form.Item>
                         <label>User Type</label>
                         <Select defaultValue="reader" value={role} onChange={setRole}>
@@ -353,12 +370,12 @@ const AddAccess = React.memo(({ id }: { id: String }) => {
                     <Form.Item>
                         <label>Email</label>
 
-                        <Input type="email" value={emailAddress} onChange={e => setEmailAddress(e.target.value)}/>
+                        <Input type="email" value={emailAddress} onChange={e => setEmailAddress(e.target.value)} />
                     </Form.Item>
                     <Button onClick={CreatePermission} loading={loading}>Add</Button>
-                    </form>
-                </Form>
-            
+                </form>
+            </Form>
+
             <Typography>set {emailAddress} as {role}</Typography>
         </Modal>
     </>
