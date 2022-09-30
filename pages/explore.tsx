@@ -268,8 +268,9 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
         <Button type="primary" style={{ height: "inherit" }} onClick={() => toogle(true)}> <UnlockTwoTone />Edit Permissons</Button>
         <Drawer
             size="large"
+            style={{ width:"100%", maxWidth: "800px"}}
             open={open}
-            onClose={() => toogle(false)}
+            onClose={() => toogle(false)} 
             footer={<Alert closable={false} message="Owner will not be deleted"
                 type="error"
                 showIcon={true}
