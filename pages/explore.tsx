@@ -1,5 +1,5 @@
 import React, { FormEventHandler } from "react";
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import { List, Row, Button, Drawer, Typography, notification, Input, Select, Alert, Form, Modal, Collapse } from "antd";
 import NextLink from "next/link"
 import { useRouter } from "next/router";
@@ -189,7 +189,7 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
             </a>
         </Button>
         <EditAccess id={data.id} />
-        <AddAccess />
+        <AddAccess id={data.id} />
     </div>
 })
 
@@ -293,20 +293,6 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
 
 
 const gg = [{
-    lable: "Owner",
-    value: "owner"
-},
-{
-    lable: "Organizer",
-
-    value: "organizer"
-},
-{
-    lable: "File Organizer",
-
-    value: "fileOrganizer"
-},
-{
     lable: "Writer",
 
     value: "writer"
@@ -322,16 +308,17 @@ const gg = [{
     value: "reader"
 }]
 
-const AddAccess = React.memo(() => {
+const AddAccess = React.memo(({ id }: { id: String }) => {
     const [open, toogle] = useToggle(false);
+    const [loading, toogleLoading] = useToggle(false);
     const [emailAddress, setEmailAddress] = React.useState("");
     const [role, setRole] = React.useState("reader");
     function CreatePermission(e: React.FormEvent) {
             e.preventDefault()
-            
+            toogleLoading(true)
             Axios({
                 method: "POST",
-                url: `/api/drive/permissions/create?emailAddress=${emailAddress}&role=${role}`
+                url: `/api/drive/permissions/create?emailAddress=${emailAddress}&role=${role}&fileID=${id}`
             }).then(() => {
                 setEmailAddress("");
                 setRole("");
@@ -339,11 +326,18 @@ const AddAccess = React.memo(() => {
                     message: "Permission Assigned Succesfully"
                 });
                 toogle(false)
+            }).catch((err: AxiosError) => {
+                // @ts-ignore
+                err.response.data?.errors.map((error) => {
+                notification["error"]({
+                    message: error?.message || "Something weng wrong"
+                });
+            })
             })
     }
     return <>
         <Button style={{ height: "inherit" }} onClick={() => toogle(true)}>Add</Button>
-        <Modal open={open} onCancel={() => toogle(false)} onOk={CreatePermission}>
+        <Modal open={open} onCancel={() => toogle(false)} >
             
                 <Form >
                     <form onSubmit={CreatePermission}>
@@ -361,6 +355,7 @@ const AddAccess = React.memo(() => {
 
                         <Input type="email" value={emailAddress} onChange={e => setEmailAddress(e.target.value)}/>
                     </Form.Item>
+                    <Button onClick={CreatePermission} loading={loading}>Add</Button>
                     </form>
                 </Form>
             

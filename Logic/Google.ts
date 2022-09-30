@@ -61,9 +61,9 @@ class Google {
         const gg = await files.files.get(query)
         return gg
     };
-    async Drive_Permissions_Create(query: GoogleApi.drive_v3.Params$Resource$Files$Create, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
+    async Drive_Permissions_Create(query: GoogleApi.drive_v3.Params$Resource$Permissions$Create, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
         const files = await this.setUP_drive(req, res);
-        const gg = await files.permissions.get(query)
+        const gg = await files.permissions.create(query)
         return gg
     }
 
