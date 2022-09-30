@@ -102,7 +102,7 @@ const Page = ({ data }) => {
 
 
 
-    return <Row style={{ display: "flex", flexDirection: "column" }}>
+    return <Row style={{ display: "flex", flexDirection: "column", margin:"0 20px" }}>
 
         <Typography style={{ width: "100%", textAlign: "center", fontSize: "35px", fontWeight: "bold", flex: 0 }}>Drive Manager</Typography>
 
@@ -181,7 +181,7 @@ const FileItem = React.memo(({ data }: { data: drive_v3.Schema$File }) => {
 
 
 
-        <Dropdown autoFocus arrow placement="topLeft" trigger={["click"]} overlay={
+        <Dropdown  autoFocus arrow placement="topLeft" trigger={["click"]} overlay={
             <Menu 
             items={[
                 {
@@ -279,7 +279,7 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
                     disabled={permissions.length === 0}
                     danger>Delete All</Button>}
             />}
-
+    
 
 
         >
