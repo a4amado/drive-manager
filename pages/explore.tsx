@@ -270,7 +270,7 @@ const FileItem = React.memo(
           >
             <NextLink href={`/explore?id=${data.id}`}>
               <a style={{ margin: "10px 0" }}>
-                <Typography>
+              <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>
                   <strong>
                     <FolderTwoTone
                       style={{
