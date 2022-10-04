@@ -159,6 +159,7 @@ const Page = ({ data }) => {
         dataSource={files}
         grid={{ column: 1 }}
         renderItem={(item: drive_v3.Schema$File, i) => (
+          
           <FileItem data={item} i={i} />
         )}
         bordered
@@ -252,7 +253,9 @@ const FileItem = React.memo(
           >
             <strong>
               <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
+              <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>
               {data.name}
+              </Typography>
             </strong>
           </Typography>
         )}
@@ -510,8 +513,7 @@ const PermissionItem = React.memo(
           (typeof data?.filterd === "boolean" && !data?.filterd) || deleted
         }
       >
-        {data.emailAddress}
-        {data.id}
+        <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>{data.emailAddress}</Typography>
         <Button loading={deleteing} onClick={deletePermission}>
           Delete
         </Button>
