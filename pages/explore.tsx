@@ -355,7 +355,7 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
       </Button>
       <Drawer
         size="large"
-        // width={window?.innerWidth > 900 ? 800 : window?.innerWidth - 100}
+        width={window?.innerWidth > 900 ? 800 : window?.innerWidth - 100}
         open={open}
         onClose={() => toogle(false)}
         destroyOnClose={true}
