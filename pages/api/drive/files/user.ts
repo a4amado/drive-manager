@@ -6,6 +6,8 @@ import Google, { queryDrive } from "../../../../Logic/Google";
 
 
 
+
+
 const handler = nc({
   onError: (err, req: NextApiRequest, res: NextApiResponse, next) => {
     console.error(err.stack);
@@ -19,20 +21,15 @@ const handler = nc({
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
 
-    const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-    const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
-    if (id && pageToken) throw "Dont send fileId and pageToken together";
+    const emailAddress = Array.isArray(req.query.emailAddress) ? req.query.emailAddress[0] : req.query.emailAddress;
+    
     const query: drive_v3.Params$Resource$Files$List = {
       pageSize: 50, fields:  `files(mimeType, name, id, webViewLink, iconLink), nextPageToken`,
-      
-    };
-
+      q: queryDrive({
+        readers: emailAddress
+      }),
     
-  
-    if (id) query.q = queryDrive({
-      parents: !!id? id : "root"
-    })
-    else if (pageToken) query.pageToken = pageToken
+    };
 
 
     // SETUP_CLIENT

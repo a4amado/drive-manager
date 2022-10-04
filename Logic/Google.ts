@@ -6,12 +6,9 @@ import { getTokens } from "../Config/AuthClient";
 
 
 class Google {
-    private authClient: GoogleApi.Auth.AuthClient;
-    private driveObj: GoogleApi.drive_v3.Drive;
     private auth(req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (this.authClient) return resolve(this.authClient)
                 const authObject = await getTokens(req, res);
 
                 const authClient = new GoogleApi.google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, "http://localhost:3000/api/auth/callback/google")
@@ -20,7 +17,7 @@ class Google {
                     refresh_token: authObject[0].refresh_token
                 });
                 authClient.apiKey = process.env.DRIVE_API_KEY;
-                this.authClient = authClient;
+                
                 
                 return resolve(authClient)
             } catch (error) {
@@ -29,19 +26,25 @@ class Google {
         })
     };
 
-    private setUP_drive(req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage): Promise<GoogleApi.drive_v3.Drive> {
+    setUP_drive(req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage): Promise<GoogleApi.drive_v3.Drive> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (this.driveObj) return resolve(this.driveObj)
+                
                 const auth = await this.auth(req, res)
                 const drive = GoogleApi.google.drive({ version: "v3", auth: auth })
                 
-                this.driveObj = drive;
+                
                 return resolve(drive);
             } catch (error) {
                 return reject(error);
             }
         })
+    };
+
+    async Drive_Drives_list(query: GoogleApi.drive_v3.Params$Resource$Drives$List, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
+        const files = await this.setUP_drive(req, res);
+        const gg = await files.drives.list(query)
+        return gg
     };
 
     async Drive_Files_list(query: GoogleApi.drive_v3.Params$Resource$Files$List, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
@@ -64,6 +67,11 @@ class Google {
     async Drive_Permissions_Create(query: GoogleApi.drive_v3.Params$Resource$Permissions$Create, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
         const files = await this.setUP_drive(req, res);
         const gg = await files.permissions.create(query)
+        return gg
+    }
+    async Drive_Permissions_Delete(query: GoogleApi.drive_v3.Params$Resource$Permissions$Delete, req: NextApiRequest | IncomingMessage, res: NextApiResponse | OutgoingMessage) {
+        const files = await this.setUP_drive(req, res);
+        const gg = await files.permissions.delete(query)
         return gg
     }
 

@@ -1,36 +1,103 @@
+ 
 import React from "react";
-import { Layout, Row, AutoComplete } from "antd"
-import { authOptions } from "./api/auth/[...nextauth]";
+import { Button, Form, Layout, Typography } from "antd";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
+import { signIn } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+
+
+import { motion, AnimationProps } from "framer-motion";
 
 
 
-const MyApp = () => {
-    const [options, setOptions] = React.useState([]);
-    const [text, setText] = React.useState("");
-    return <Layout style={{ display: "flex", flexDirection: "column", justifyContent: "stretch", height: "100vh" }}>
-        <Row style={{ flex: 1, width: "100%", maxWidth: "800px", margin: "0 auto", flexDirection: "column" }}>
-            <Row style={{ width: "100%", height: "80px" }}>
-                <AutoComplete
-                    style={{ width: "100%" }}
-                    onSearch={() => setOptions([...options, "s"])}
 
-                >
-                {
-                    options.map((e) => {
-                        return <AutoComplete.Option>sss</AutoComplete.Option>
-                    })
-                }
-                </AutoComplete>
-            </Row>
+const Animation = (props: AnimationProps) => props;
 
-        </Row>
-        <Row style={{ flex: 0, height: "50px" }}>sss</Row>
 
-    </Layout>
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  );
+  if (session)
+    return {
+      redirect: {
+        destination: "/explore",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
 };
 
+const MyApp = () => {
+  return (
+    <React.Fragment>
+      <Head>
+        <link rel="stylesheet" href="/disable_body_scroll.css" />
+      </Head>
 
+      <Layout
+        style={{
+          background: "#1A535C",
+          width: "100%",
+          height: "100vh",
+          overflow: "hidden"
+        }}
+      >
+        <img
+          src="/Home_DOOR.svg"
+          style={{
+            width: "calc(100% - 20px)",
+            maxWidth: "400px",
+            margin: "auto auto",
+          }}
+        />
+
+        <Form
+          style={{
+            width: "calc(100% - 100px)",
+            margin: "auto auto"
+          }}
+        >
+          <Form.Item
+            style={{ width: "100%", margin: "0 auto", maxWidth: "300px" }}
+          >
+            <Button
+              style={{
+                background: "#fff",
+                width: "100%",
+                height: "100px",
+                borderRadius: "10px",
+                color: "#FFBA33",
+                backgroundColor: "#1A535C",
+              }}
+              type="primary"
+              onClick={() => signIn("google")}
+            >
+              <Typography
+                style={{
+                  fontSize: "23px",
+                  fontFamily: "Fira Code",
+                  fontWeight: "bold",
+                  color: "#FFBA33",
+                }}
+              >
+                Connect to Drive
+              </Typography>
+            </Button>
+          </Form.Item>
+        </Form>
+      </Layout>
+    </React.Fragment>
+  );
+};
 
 export default MyApp;

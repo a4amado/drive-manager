@@ -47,6 +47,10 @@ model User {
   sessions      Session[]
 }
 
+model ToBeDeleted {
+  email String @id @unique
+}
+
 model VerificationToken {
   id String @id @default(cuid()) @map("_id")
   identifier String
