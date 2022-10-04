@@ -20,7 +20,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { drive_v3 } from "googleapis";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 import {
   FolderTwoTone,
@@ -98,7 +98,6 @@ const Page = ({ data }) => {
     nextPageToken: data.nextPageToken,
   });
 
-  
   async function getPage() {
     try {
       const NewFiles = await Axios({
@@ -159,7 +158,6 @@ const Page = ({ data }) => {
         dataSource={files}
         grid={{ column: 1 }}
         renderItem={(item: drive_v3.Schema$File, i) => (
-          
           <FileItem data={item} i={i} />
         )}
         bordered
@@ -251,12 +249,17 @@ const FileItem = React.memo(
               alignItems: "center",
             }}
           >
-            <strong>
-              <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
-              <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>
+            <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
+            <Typography
+              style={{
+                width: "100%",
+                overflow: "hidden",
+                fontSize: "13px",
+                textOverflow: "ellipsis",
+              }}
+            >
               {data.name}
-              </Typography>
-            </strong>
+            </Typography>
           </Typography>
         )}
         {isFolder && (
@@ -269,17 +272,22 @@ const FileItem = React.memo(
             }}
           >
             <NextLink href={`/explore?id=${data.id}`}>
-              <a style={{ margin: "10px 0" }}>
-              <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>
-                  <strong>
-                    <FolderTwoTone
-                      style={{
-                        fontSize: "20px",
-                        margin: "0 10px",
-                      }}
-                    />
-                    {data.name}
-                  </strong>
+              <a style={{ margin: "10px 0", display: "flex", flexDirection :"row" }}>
+                <FolderTwoTone
+                  style={{
+                    fontSize: "20px",
+                    margin: "0 10px",
+                  }}
+                />
+                <Typography
+                  style={{
+                    width: "100%",
+                    overflow: "hidden",
+                    fontSize: "13px",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {data.name}
                 </Typography>
               </a>
             </NextLink>
@@ -508,12 +516,22 @@ const PermissionItem = React.memo(
     };
 
     return (
-      <List.Item 
-        hidden={// @ts-ignore
+      <List.Item
+        hidden={
+          // @ts-ignore
           (typeof data?.filterd === "boolean" && !data?.filterd) || deleted
         }
       >
-        <Typography style={{ width: "100%", overflow:"hidden", fontSize: "13px", textOverflow: "ellipsis"}}>{data.emailAddress}</Typography>
+        <Typography
+          style={{
+            width: "100%",
+            overflow: "hidden",
+            fontSize: "13px",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {data.emailAddress}
+        </Typography>
         <Button loading={deleteing} onClick={deletePermission}>
           Delete
         </Button>
