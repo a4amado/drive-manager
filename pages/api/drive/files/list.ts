@@ -28,22 +28,23 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     const query: drive_v3.Params$Resource$Files$List = {
       pageSize: 50,
       fields: `files(mimeType, name, id, webViewLink), nextPageToken`,
-      pageToken: pageToken,
       q: queryDrive({
         parents: id || "root"
       })
     };
 
-    // query.q = queryDrive({
-    //   parents: !!id ? id : "root",
-      
-    // });
+    if(pageToken) {
+      query.pageToken = pageToken
+    }
+
+ 
   
 
 
 
     const { data } = await Google.Drive_Files_list(query, req, res);
     return res.send(data);
+    
   } catch (error) {
     console.log(error);
 

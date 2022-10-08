@@ -21,7 +21,6 @@ import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { drive_v3 } from "googleapis";
 
-
 import {
   FolderTwoTone,
   UnlockTwoTone,
@@ -50,17 +49,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ? ctx.query.pageToken[0]
     : ctx.query.pageToken;
 
-  
   const query: drive_v3.Params$Resource$Files$List = {
     pageSize: 50,
-    fields: `files(mimeType, name, id, webViewLink), nextPageToken`
+    fields: `files(mimeType, name, id, webViewLink), nextPageToken`,
+    
   };
 
   if (!pageToken)
     query.q = queryDrive({
-      parents: !!id ? id : "root",
+      parents: !!id ? id : "root"
     });
-  
   else if (pageToken) query.pageToken = pageToken;
 
   // SETUP_CLIENT
@@ -71,8 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ctx.req,
       ctx.res
     );
-    
-    
+
     return {
       props: {
         data: data,
@@ -105,11 +102,13 @@ const Page = ({ data }) => {
     try {
       const NewFiles = await Axios({
         method: "GET",
-        url: `/api/drive/files/list?pageToken=${nextPageToken}`
+        url: `/api/drive/files/list?pageToken=${nextPageToken}`,
       });
+      console.log(NewFiles.data.newPageToken);
+
       setParams({
         files: [...files, ...NewFiles.data.files],
-        nextPageToken: NewFiles.data.newPageToken || "",
+        nextPageToken: NewFiles.data.nextPageToken || "",
       });
     } catch (error) {}
   }
@@ -164,18 +163,16 @@ const Page = ({ data }) => {
           <FileItem data={item} i={i} />
         )}
         bordered
-        loadMore={
-          nextPageToken && (
-            <Col
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button onClick={getPage}>LoadMore</Button>
-            </Col>
-          )
+        loadMore={ nextPageToken &&
+          <Col
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button onClick={getPage}>LoadMore</Button>
+          </Col>
         }
         loading={files.length === 0}
       />
@@ -275,7 +272,13 @@ const FileItem = React.memo(
             }}
           >
             <NextLink href={`/explore?id=${data.id}`}>
-              <a style={{ margin: "10px 0", display: "flex", flexDirection :"row" }}>
+              <a
+                style={{
+                  margin: "10px 0",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
                 <FolderTwoTone
                   style={{
                     fontSize: "20px",
