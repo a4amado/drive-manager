@@ -24,17 +24,22 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
 
     
     
-    if (id && pageToken) throw "Dont send fileId and pageToken together";
+    
     const query: drive_v3.Params$Resource$Files$List = {
       pageSize: 50,
-      fields: `files(mimeType, name, id, webViewLink, iconLink), nextPageToken`,
+      fields: `files(mimeType, name, id, webViewLink), nextPageToken`,
+      pageToken: pageToken,
+      q: queryDrive({
+        parents: id || "root"
+      })
     };
 
-    if (id)
-      query.q = queryDrive({
-        parents: !!id ? id : "root",
-      });
-    else if (pageToken) query.pageToken = pageToken;
+    // query.q = queryDrive({
+    //   parents: !!id ? id : "root",
+      
+    // });
+  
+
 
 
     const { data } = await Google.Drive_Files_list(query, req, res);

@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ? ctx.query.pageToken[0]
     : ctx.query.pageToken;
 
-  if (id && pageToken) throw "Dont send fileId and pageToken together";
+  
   const query: drive_v3.Params$Resource$Files$List = {
     pageSize: 50,
     fields: `files(mimeType, name, id, webViewLink), nextPageToken`
@@ -71,6 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       ctx.req,
       ctx.res
     );
+    
+    
     return {
       props: {
         data: data,
@@ -103,7 +105,7 @@ const Page = ({ data }) => {
     try {
       const NewFiles = await Axios({
         method: "GET",
-        url: `/api/drive/files/list?pageToken=${nextPageToken}`,
+        url: `/api/drive/files/list?pageToken=${nextPageToken}`
       });
       setParams({
         files: [...files, ...NewFiles.data.files],
