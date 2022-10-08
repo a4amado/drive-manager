@@ -20,7 +20,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { drive_v3 } from "googleapis";
-import { motion } from "framer-motion";
+
 
 import {
   FolderTwoTone,
@@ -53,13 +53,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (id && pageToken) throw "Dont send fileId and pageToken together";
   const query: drive_v3.Params$Resource$Files$List = {
     pageSize: 50,
-    fields: `files(mimeType, name, id, webViewLink), nextPageToken`,
+    fields: `files(mimeType, name, id, webViewLink), nextPageToken`
   };
 
-  if (id)
+  if (!pageToken)
     query.q = queryDrive({
       parents: !!id ? id : "root",
     });
+  
   else if (pageToken) query.pageToken = pageToken;
 
   // SETUP_CLIENT
