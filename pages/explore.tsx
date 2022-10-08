@@ -103,7 +103,7 @@ const Page = ({ data }) => {
     try {
       const NewFiles = await Axios({
         method: "GET",
-        url: "/api/drive/files/list?type=page&pageToken=" + nextPageToken,
+        url: `/api/drive/files/list?pageToken=${nextPageToken}`,
       });
       setParams({
         files: [...files, ...NewFiles.data.files],

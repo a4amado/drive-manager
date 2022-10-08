@@ -19,10 +19,8 @@ const handler = nc({
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-    const isId = !!id;
-    const pageToken = Array.isArray(req.query.pageToken)
-      ? req.query.pageToken[0]
-      : req.query.pageToken;
+    const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
+    
 
     
     
