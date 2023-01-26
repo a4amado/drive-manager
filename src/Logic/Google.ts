@@ -10,13 +10,18 @@ class Google {
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
+        
+        // get Users's token from DB
         const authObject = await getTokens(req, res);
 
+        // create Auth Client
         const authClient = new GoogleApi.google.auth.OAuth2(
           process.env.GOOGLE_CLIENT_ID,
           process.env.GOOGLE_CLIENT_SECRET,
           "http://localhost:3000/api/auth/callback/google"
         );
+
+        // add user's token to client
         authClient.setCredentials({
           access_token: authObject[0].access_token,
           refresh_token: authObject[0].refresh_token,

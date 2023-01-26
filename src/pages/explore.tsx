@@ -76,11 +76,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
+    console.log(error);
+    
     return {
       props: {
         data: {
           files: [],
         },
+        error: JSON.stringify(error)
       },
     };
   }
@@ -403,10 +406,6 @@ const EditAccess = React.memo(({ id }: { id: String }) => {
           loading={!error && permissions.length === 0}
         >
           {filterdPermissions
-            .sort(
-              (a: drive_v3.Schema$Permission, b: drive_v3.Schema$Permission) =>
-                a.emailAddress[0].localeCompare(b.emailAddress[0])
-            )
             .map((file: drive_v3.Schema$Permission) => (
               <PermissionItem data={file} fileID={id} />
             ))}
