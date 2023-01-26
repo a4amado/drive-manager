@@ -1,4 +1,4 @@
-import "../styles/index.css";
+
 import "antd/dist/antd.css";
 import "nprogress/nprogress.css";
 import { Suspense } from "react";
