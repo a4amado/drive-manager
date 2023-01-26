@@ -3,8 +3,7 @@ import axios from "axios";
 import Google from "googleapis";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
-import GoogleClass from "../../../Logic/Google";
-
+import GoogleClass from "../../../../Logic/Google";
 
 const handler = nc({
   onError: (err, req: NextApiRequest, res: NextApiResponse, next) => {
@@ -16,25 +15,27 @@ const handler = nc({
   },
 });
 
-
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const emailAddress = Array.isArray(req.query.emailAddress) ? req.query.emailAddress[0] : req.query.emailAddress;
-    const query: Google.drive_v3.Params$Resource$Files$List = {
+    const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
+    const pageToken = Array.isArray(req.query.pageToken)
+      ? req.query.pageToken[0]
+      : req.query.pageToken;
+
+    const query: Google.drive_v3.Params$Resource$Permissions$List = {
       pageSize: 50,
       fields: "*",
-      q: "'a4addel@gmail.com' in writers or 'a4addel@gmail.com' in readers or 'a4addel@gmail.com' in owners"
-      
     };
+    if (id && pageToken) throw "Dont send fileId and pageToken together";
 
+    if (id) query.fileId = id;
+    else if (pageToken) query.pageToken = pageToken;
 
-    const { data } = await GoogleClass.Drive_Files_list(query, req, res);
+    const { data } = await GoogleClass.Drive_Permission_list(query, req, res);
     res.send(data);
   } catch (error) {
     res.status(500).send(error);
   }
-
-})
-
+});
 
 export default handler;

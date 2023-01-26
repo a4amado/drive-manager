@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import GoogleClass from "../../../../Logic/Google";
 
-
 const handler = nc({
   onError: (err, req: NextApiRequest, res: NextApiResponse, next) => {
     console.error(err.stack);
@@ -18,29 +17,29 @@ const handler = nc({
 
 handler.delete(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-
-
-    const fileID = Array.isArray(req.query.fileID) ? req.query.fileID[0] : req.query.fileID;
-    const permissionId = Array.isArray(req.query.permissionId) ? req.query.permissionId[0] : req.query.permissionId;
-    
+    const fileID = Array.isArray(req.query.fileID)
+      ? req.query.fileID[0]
+      : req.query.fileID;
+    const permissionId = Array.isArray(req.query.permissionId)
+      ? req.query.permissionId[0]
+      : req.query.permissionId;
 
     const query: Google.drive_v3.Params$Resource$Permissions$Delete = {
       fields: "*",
       fileId: fileID,
-      permissionId: permissionId
+      permissionId: permissionId,
     };
-    
 
-    
-
-    const { data } = await GoogleClass.Drive_Permissions_Delete(query, req, res);
+    const { data } = await GoogleClass.Drive_Permissions_Delete(
+      query,
+      req,
+      res
+    );
     res.send(data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send(error);
   }
-
-})
-
+});
 
 export default handler;

@@ -4,10 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import Google, { queryDrive } from "../../../../Logic/Google";
 
-
-
-
-
 const handler = nc({
   onError: (err, req: NextApiRequest, res: NextApiResponse, next) => {
     console.error(err.stack);
@@ -20,29 +16,27 @@ const handler = nc({
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const emailAddress = Array.isArray(req.query.emailAddress)
+      ? req.query.emailAddress[0]
+      : req.query.emailAddress;
 
-    const emailAddress = Array.isArray(req.query.emailAddress) ? req.query.emailAddress[0] : req.query.emailAddress;
-    
     const query: drive_v3.Params$Resource$Files$List = {
-      pageSize: 50, fields:  `files(mimeType, name, id, webViewLink, iconLink), nextPageToken`,
+      pageSize: 50,
+      fields: `files(mimeType, name, id, webViewLink, iconLink), nextPageToken`,
       q: queryDrive({
-        readers: emailAddress
+        readers: emailAddress,
       }),
-    
     };
 
-
     // SETUP_CLIENT
-    
+
     const { data } = await Google.Drive_Files_list(query, req, res);
     return res.send(data);
   } catch (error) {
     console.log(error);
-    
+
     res.status(500).send(error);
   }
-
-})
-
+});
 
 export default handler;

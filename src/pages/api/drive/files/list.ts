@@ -11,40 +11,30 @@ const handler = nc({
   },
   onNoMatch: (req, res) => {
     res.status(404).end("Page is not found");
-  }
+  },
 });
-
-
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-    const pageToken = Array.isArray(req.query.pageToken) ? req.query.pageToken[0] : req.query.pageToken;
-    
+    const pageToken = Array.isArray(req.query.pageToken)
+      ? req.query.pageToken[0]
+      : req.query.pageToken;
 
-    
-    
-    
     const query: drive_v3.Params$Resource$Files$List = {
       pageSize: 50,
       fields: `files(mimeType, name, id, webViewLink), nextPageToken`,
       q: queryDrive({
-        parents: id || "root"
-      })
+        parents: id || "root",
+      }),
     };
 
-    if(pageToken) {
-      query.pageToken = pageToken
+    if (pageToken) {
+      query.pageToken = pageToken;
     }
-
- 
-  
-
-
 
     const { data } = await Google.Drive_Files_list(query, req, res);
     return res.send(data);
-    
   } catch (error) {
     console.log(error);
 

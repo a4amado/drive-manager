@@ -4,9 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import Google from "../../../../Logic/Google";
 
-
-
-
 const handler = nc({
   onError: (err, req: NextApiRequest, res: NextApiResponse, next) => {
     console.error(err.stack);
@@ -19,31 +16,23 @@ const handler = nc({
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-
     const path = [];
     const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-    
-    const query: drive_v3.Params$Resource$Files$Get = {
-        fields:  `*`, 
-        fileId: id
-    };
-  
- 
 
+    const query: drive_v3.Params$Resource$Files$Get = {
+      fields: `*`,
+      fileId: id,
+    };
 
     // SETUP_CLIENT
-    
+
     const data = await Google.Drive_file_get(query, req, res);
     return res.send(data);
   } catch (error) {
     console.log(error);
-    
+
     res.status(500).send(error);
   }
-
-})
-
+});
 
 export default handler;
-
-
