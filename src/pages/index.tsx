@@ -53,7 +53,7 @@ const MyApp = () => {
         }}
       >
         <img
-          src="/Home_DOOR.svg"
+          src="/Homepage_DOOR.svg"
           style={{
             width: "calc(100% - 20px)",
             maxWidth: "400px",
