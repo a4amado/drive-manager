@@ -16,6 +16,7 @@ import React, { memo } from "react";
 import Axios from "axios";
 
 import PermissionItem from "../PermissionItem";
+import { useToggle } from "react-use";
 const EditAccess: React.FC<{ id: string }> = ({ id }) => {
   const [error, setError] = useToggle(false);
   const [permissions, setPermissions] = React.useState<
@@ -76,7 +77,7 @@ const EditAccess: React.FC<{ id: string }> = ({ id }) => {
       </Button>
       <Drawer
         size="large"
-        width={window?.innerWidth > 900 ? 800 : window?.innerWidth - 100}
+        width={window && window?.innerWidth}
         open={open}
         onClose={() => toogle(false)}
         destroyOnClose={true}
@@ -115,7 +116,4 @@ const EditAccess: React.FC<{ id: string }> = ({ id }) => {
   );
 };
 export default memo(EditAccess);
-
-function useToggle(arg0: boolean): [any, any] {
-  throw new Error("Function not implemented.");
-}
+ 
