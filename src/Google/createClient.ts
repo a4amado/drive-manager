@@ -9,6 +9,8 @@ const createClinet = async (
   res: NextApiResponse | OutgoingMessage
 ) => {
   const tokens = await getAccesAndRefreshTokens(req, res);
+  console.log(tokens);
+  
   if (typeof tokens != "object") throw "Not Auth";
 
   const { client } = new GoogleUserClient();

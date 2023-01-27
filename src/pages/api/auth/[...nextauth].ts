@@ -22,10 +22,11 @@ export const authOptions: NextAuthOptions = {
   ],
   adapter: PrismaAdapter(client),
   session: {
-    strategy: "jwt",
+    strategy: "database",
     maxAge: millseconds_in_a_day,
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: true
 };
 
 export default NextAuth(authOptions);
