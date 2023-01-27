@@ -31,6 +31,26 @@ class Google {
     return gg;
   }
 
+  async Drive_Permissions_List(
+    query: GoogleApi.drive_v3.Params$Resource$Permissions$List,
+    req: NextApiRequest | IncomingMessage,
+    res: NextApiResponse | OutgoingMessage
+  ) {
+    const files = await this.setUP_drive(req, res);
+    const gg = await files.files.list(query);
+    return gg;
+  }
+
+  async Drive_Get_Drive_Id(
+    query: GoogleApi.drive_v3.Params$Resource$About$Get,
+    req: NextApiRequest | IncomingMessage,
+    res: NextApiResponse | OutgoingMessage
+  ) {
+    const files = await this.setUP_drive(req, res);
+    const gg = await files.files.get({ fileId: "root", fields: "id" });
+    return gg;
+  }
+
   async Drive_Files_list(
     query: GoogleApi.drive_v3.Params$Resource$Files$List,
     req: NextApiRequest | IncomingMessage,
