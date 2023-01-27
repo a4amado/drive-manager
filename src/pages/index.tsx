@@ -1,4 +1,4 @@
- 
+
 import React from "react";
 import { Button, Form, Layout, Typography } from "antd";
 import { GetServerSideProps } from "next";
@@ -45,50 +45,32 @@ const MyApp = () => {
       </Head>
 
       <Layout
-        style={{
-          background: "#1A535C",
-          width: "100%",
-          height: "100vh",
-          overflow: "hidden"
-        }}
+        className="bg-sky-900 w-full  h-screen overflow-hidden"
+
       >
         <img
           src="/Homepage_DOOR.svg"
-          style={{
-            width: "calc(100% - 20px)",
-            maxWidth: "400px",
-            margin: "auto auto",
-          }}
+          className="w-[calc(100% - 20px)] max-w-md m-auto"
+
         />
 
         <Form
-          style={{
-            width: "calc(100% - 100px)",
-            margin: "auto auto"
-          }}
+          className="w-[calc(100% - 100px)] max-w-md m-auto"
+
         >
           <Form.Item
-            style={{ width: "100%", margin: "0 auto", maxWidth: "300px" }}
+            className="w-full mx-0 my-auto max-w-xs"
+            
           >
             <Button
-              style={{
-                background: "#fff",
-                width: "100%",
-                height: "100px",
-                borderRadius: "10px",
-                color: "#FFBA33",
-                backgroundColor: "#1A535C",
-              }}
+            className="bg-sky-800 w-full h-full rounded text-yellow-300 "
+              
               type="primary"
               onClick={() => signIn("google")}
             >
               <Typography
-                style={{
-                  fontSize: "23px",
-                  fontFamily: "Fira Code",
-                  fontWeight: "bold",
-                  color: "#FFBA33",
-                }}
+              className="text-xl font-bold text-yellow-300"
+                
               >
                 Connect to Drive
               </Typography>
