@@ -10,10 +10,7 @@ import {
 import Axios, { AxiosError } from "axios";
 import React, { memo } from "react";
 import { useToggle } from "react-use";
-import  Roles from "../../../public/roles.json";
-
-
-
+import Roles from "../../../public/roles.json";
 
 function AddAccess({ id }: { id: String }) {
   const [open, toogle] = useToggle(false);

@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
     maxAge: millseconds_in_a_day,
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true
+  debug: true,
 };
 
 export default NextAuth(authOptions);

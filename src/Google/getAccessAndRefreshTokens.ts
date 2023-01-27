@@ -10,9 +10,8 @@ async function getAccesAndRefreshTokens(
   res: NextApiResponse | OutgoingMessage
 ): Promise<{ refresh_token: string; access_token: string } | boolean> {
   // @ts-ignore
-   const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await unstable_getServerSession(req, res, authOptions);
 
-   
   if (!session) return false;
 
   const accounts = await client.user.findFirst({
@@ -25,8 +24,6 @@ async function getAccesAndRefreshTokens(
     },
   });
 
-  
-  
   // If account or access_token or refresh_token does not exist
   if (
     !accounts?.accounts[0] ||
@@ -41,7 +38,7 @@ async function getAccesAndRefreshTokens(
   };
 
   console.log(tokens);
-  
+
   return tokens;
 }
 
