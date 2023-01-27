@@ -18,7 +18,7 @@ Router.events.on("routeChangeComplete", () => {
   NProgress.done();
 });
 
-const MyApp = ({ Component, pageProps }: any) => {  
+const MyApp = ({ Component, pageProps }: any) => {
   return (
     <Suspense fallback={<h1>Loading</h1>}>
       <SessionProvider session={pageProps?.session}>

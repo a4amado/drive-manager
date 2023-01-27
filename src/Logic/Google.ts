@@ -1,47 +1,17 @@
 import * as GoogleApi from "googleapis";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { IncomingMessage, OutgoingMessage } from "node:http";
-import { getTokens } from "../Config/AuthClient";
+
+import createClient from "../Google/createClient";
 
 class Google {
-  private auth(
-    req: NextApiRequest | IncomingMessage,
-    res: NextApiResponse | OutgoingMessage
-  ): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        
-        // get Users's token from DB
-        const authObject = await getTokens(req, res);
-
-        // create Auth Client
-        const authClient = new GoogleApi.google.auth.OAuth2(
-          process.env.GOOGLE_CLIENT_ID,
-          process.env.GOOGLE_CLIENT_SECRET,
-          "http://localhost:3000/api/auth/callback/google"
-        );
-
-        // add user's token to client
-        authClient.setCredentials({
-          access_token: authObject[0].access_token,
-          refresh_token: authObject[0].refresh_token,
-        });
-        authClient.apiKey = process.env.DRIVE_API_KEY;
-
-        return resolve(authClient);
-      } catch (error) {
-        return reject(error);
-      }
-    });
-  }
-
   setUP_drive(
     req: NextApiRequest | IncomingMessage,
     res: NextApiResponse | OutgoingMessage
   ): Promise<GoogleApi.drive_v3.Drive> {
     return new Promise(async (resolve, reject) => {
       try {
-        const auth = await this.auth(req, res);
+        const auth = await createClient(req, res);
         const drive = GoogleApi.google.drive({ version: "v3", auth: auth });
 
         return resolve(drive);
@@ -129,6 +99,8 @@ interface Query_Term {
   appProperties?: { paidInBitcoin?: Boolean };
   visibility?: String;
 }
+
+// @ts-ignore
 import GDQT from "search-string-for-google-drive";
 
 const queryDrive = (params: Query_Term) => GDQT(params);

@@ -1,0 +1,14 @@
+[
+    {
+        "lable": "Writer",
+        "value": "writer"
+    },
+    {
+        "lable": "Commenter",
+        "value": "commenter"
+    },
+    {
+        "lable": "Reader",
+        "value": "reader"
+    }
+]
