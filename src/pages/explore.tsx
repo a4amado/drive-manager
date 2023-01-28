@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // SETUP_CLIENT
 
   try {
-    const { data } = await GoogleClass.Drive_Files_list(
+    const data = await GoogleClass.listFiles(
       query,
       ctx.req,
       ctx.res
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     return {
       props: {
-        data: data,
+        data: data?.data,
       },
     };
   } catch (error) {

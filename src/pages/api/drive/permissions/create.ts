@@ -39,12 +39,12 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
       fileId: fileID,
     };
 
-    const { data } = await GoogleClass.Drive_Permissions_Create(
+    const data = await GoogleClass.createPermissions(
       query,
       req,
       res
     );
-    res.send(data);
+    res.send(data?.data);
   } catch (error) {
     console.log(error);
 

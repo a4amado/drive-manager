@@ -33,8 +33,9 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       query.pageToken = pageToken;
     }
 
-    const { data } = await Google.Drive_Files_list(query, req, res);
-    return res.send(data);
+    const data = await Google.listFiles(query, req, res);
+    
+    return res.send(data?.data);
   } catch (error) {
     console.log(error);
 

@@ -31,8 +31,8 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     if (id) query.fileId = id;
     else if (pageToken) query.pageToken = pageToken;
 
-    const { data } = await GoogleClass.Drive_Permission_list(query, req, res);
-    res.send(data);
+    const data = await GoogleClass.listPermissions(query, req, res);
+    res.send(data?.data);
   } catch (error) {
     res.status(500).send(error);
   }

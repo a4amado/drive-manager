@@ -1,4 +1,4 @@
-import { List, Typography, Button } from "antd";
+import { List, Typography, Button, Alert } from "antd";
 import Axios from "axios";
 import { drive_v3 } from "googleapis";
 import React, { memo } from "react";
@@ -37,7 +37,9 @@ function PermissionItem({ data, fileID }: PermissionItemType) {
       >
         {data.emailAddress}
       </Typography>
-      <Button loading={deleteing} onClick={deletePermission}>
+
+      <Alert type="error"  message={data.role}/>
+      <Button loading={deleteing} onClick={deletePermission} disabled={data.role=== "owner"}>
         Delete
       </Button>
     </List.Item>

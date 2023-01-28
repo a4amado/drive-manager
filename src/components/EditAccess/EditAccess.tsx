@@ -48,6 +48,8 @@ const EditAccess: React.FC<{ id: string }> = ({ id }) => {
         url: `/api/drive/permissions/list?id=${id}`,
       })
         .then(({ data }: { data: drive_v3.Schema$PermissionList }) => {
+          console.log(data);
+          
           if (!data.permissions) return;
           if (data.permissions.length === 0) return;
           setPermissions(data.permissions);

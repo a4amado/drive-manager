@@ -62,7 +62,7 @@ function FileItem({ data, i }: { data: drive_v3.Schema$File; i: number }) {
             background: "rgba(0,0,0,0.1)",
           }}
         >
-          <SettingFilled style={{ fontSize: "20px" }} />
+          <SettingFilled className="text-xl hover:cursor-pointer" />
         </Row>
       </Dropdown>
       {!isFolder && (
