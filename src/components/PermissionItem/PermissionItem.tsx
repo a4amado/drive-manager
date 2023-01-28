@@ -27,19 +27,16 @@ function PermissionItem({ data, fileID }: PermissionItemType) {
         (typeof data?.filterd === "boolean" && !data?.filterd) || deleted
       }
     >
-      <Typography
-        style={{
-          width: "100%",
-          overflow: "hidden",
-          fontSize: "13px",
-          textOverflow: "ellipsis",
-        }}
-      >
+      <Typography className="w-full overflow-hidden text-ellipsis text-sm">
         {data.emailAddress}
       </Typography>
 
-      <Alert type="error"  message={data.role}/>
-      <Button loading={deleteing} onClick={deletePermission} disabled={data.role=== "owner"}>
+      <Alert type="error" message={data.role} />
+      <Button
+        loading={deleteing}
+        onClick={deletePermission}
+        disabled={data.role === "owner"}
+      >
         Delete
       </Button>
     </List.Item>

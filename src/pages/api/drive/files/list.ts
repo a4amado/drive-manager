@@ -34,7 +34,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const data = await Google.listFiles(query, req, res);
-    
+
     return res.send(data?.data);
   } catch (error) {
     console.log(error);

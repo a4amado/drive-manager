@@ -45,11 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // SETUP_CLIENT
 
   try {
-    const data = await GoogleClass.listFiles(
-      query,
-      ctx.req,
-      ctx.res
-    );
+    const data = await GoogleClass.listFiles(query, ctx.req, ctx.res);
 
     return {
       props: {
@@ -106,32 +102,12 @@ const Page: React.FC<{ data: drive_v3.Schema$FileList }> = ({ data }) => {
   }, [Router]);
 
   return (
-    <Row
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        margin: "0 20px",
-      }}
-    >
-      <Typography
-        style={{
-          width: "100%",
-          textAlign: "center",
-          fontSize: "35px",
-          fontWeight: "bold",
-          flex: 0,
-        }}
-      >
+    <Row className="mx-0 my-5 flex flex-col">
+      <Typography className="align-center w-full text-4xl font-bold ">
         Drive Manager
       </Typography>
       <List
-        style={{
-          width: "100%",
-          maxWidth: "800px",
-          margin: "0 auto",
-          padding: "5px 5px",
-          gap: "10px",
-        }}
+        className="mx-0 my-auto w-full max-w-3xl gap-2 p-1"
         dataSource={files.files}
         grid={{ column: 1 }}
         renderItem={(item: drive_v3.Schema$File, i) => (
@@ -140,13 +116,7 @@ const Page: React.FC<{ data: drive_v3.Schema$FileList }> = ({ data }) => {
         bordered
         loadMore={
           files.nextPageToken && (
-            <Col
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <Col className="w-full items-center justify-center">
               <Button onClick={getPage}>LoadMore</Button>
             </Col>
           )

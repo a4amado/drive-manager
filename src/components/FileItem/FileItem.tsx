@@ -14,15 +14,9 @@ function FileItem({ data, i }: { data: drive_v3.Schema$File; i: number }) {
   // @ts-ignore
   return (
     <Col
+      className="flex h-10 w-full max-w-4xl flex-row justify-between gap-3"
       style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        width: "100%",
-        maxWidth: "800px",
         background: `${i % 2 === 0 ? "rgba(0,0,0,0.1)" : ""}`,
-        height: "40px",
-        gap: "10px",
       }}
       key={data.id}
     >
@@ -52,74 +46,24 @@ function FileItem({ data, i }: { data: drive_v3.Schema$File; i: number }) {
           />
         }
       >
-        <Row
-          className="pointer"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "55px",
-            background: "rgba(0,0,0,0.1)",
-          }}
-        >
+        <Row className="pointer flex w-14 items-center justify-center bg-slate-200">
           <SettingFilled className="text-xl hover:cursor-pointer" />
         </Row>
       </Dropdown>
       {!isFolder && (
-        <Typography
-          style={{
-            height: "inherit",
-            flex: 1,
-            alignContent: "center",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <FileFilled style={{ fontSize: "20px", margin: "0 10px" }} />
-          <Typography
-            style={{
-              width: "100%",
-              overflow: "hidden",
-              fontSize: "13px",
-              textOverflow: "ellipsis",
-            }}
-          >
+        <Typography className="flex h-full flex-1 flex-row items-center align-middle">
+          <FileFilled className="mx-0 my-auto text-lg" />
+          <Typography className="w-full overflow-hidden text-clip text-sm">
             {data.name}
           </Typography>
         </Typography>
       )}
       {isFolder && (
-        <Typography
-          style={{
-            height: "inherit",
-            flex: 1,
-            alignContent: "center",
-            display: "flex",
-          }}
-        >
+        <Typography className="flex h-full flex-1 align-middle ">
           <NextLink href={`/explore?id=${data.id}`}>
-            <a
-              style={{
-                margin: "10px 0",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <FolderTwoTone
-                style={{
-                  fontSize: "20px",
-                  margin: "0 10px",
-                }}
-              />
-              <Typography
-                style={{
-                  width: "100%",
-                  overflow: "hidden",
-                  fontSize: "13px",
-                  textOverflow: "ellipsis",
-                }}
-              >
+            <a className="mx-2 my-0 flex flex-row">
+              <FolderTwoTone className="mx-0 my-3 text-xl" />
+              <Typography className="hidden w-full text-ellipsis text-sm">
                 {data.name}
               </Typography>
             </a>

@@ -3,14 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next/types";
 import { IncomingMessage, OutgoingMessage } from "node:http";
 import setUpClient from "../Google/setUpClient";
 
-
 async function listPermissions(
   query: GoogleApi.drive_v3.Params$Resource$Permissions$List,
   req: NextApiRequest | IncomingMessage,
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.permissions.list(query);
   return gg;
 }
@@ -21,7 +20,7 @@ async function getDriveId(
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.files.get({ fileId: "root", fields: "id" });
   return gg;
 }
@@ -32,7 +31,7 @@ async function listFiles(
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.files.list(query);
   return gg;
 }
@@ -43,7 +42,7 @@ async function Drive_Permission_list(
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.permissions.list(query);
   return gg;
 }
@@ -54,7 +53,7 @@ async function getFile(
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.files.get(query);
   return gg;
 }
@@ -64,7 +63,7 @@ async function createPermissions(
   res: NextApiResponse | OutgoingMessage
 ) {
   const client = await setUpClient(req, res);
-  if (!client) return null
+  if (!client) return null;
   const gg = await client.permissions.create(query);
   return gg;
 }
@@ -79,14 +78,13 @@ async function deletePermissions(
   return gg;
 }
 
-
 export default {
   listPermissions,
   getDriveId,
   listFiles,
   deletePermissions,
   createPermissions,
-  getFile
+  getFile,
 };
 
 interface Query_Term {

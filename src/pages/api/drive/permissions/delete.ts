@@ -30,11 +30,7 @@ handler.delete(async (req: NextApiRequest, res: NextApiResponse) => {
       permissionId: permissionId,
     };
 
-    const data = await GoogleClass.deletePermissions(
-      query,
-      req,
-      res
-    );
+    const data = await GoogleClass.deletePermissions(query, req, res);
     res.send(data?.data);
   } catch (error) {
     console.log(error);

@@ -39,11 +39,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
       fileId: fileID,
     };
 
-    const data = await GoogleClass.createPermissions(
-      query,
-      req,
-      res
-    );
+    const data = await GoogleClass.createPermissions(query, req, res);
     res.send(data?.data);
   } catch (error) {
     console.log(error);
