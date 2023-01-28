@@ -51,24 +51,18 @@ function FileItem({ data, i }: { data: drive_v3.Schema$File; i: number }) {
         </Row>
       </Dropdown>
       {!isFolder && (
-        <Typography className="flex h-full flex-1 flex-row items-center align-middle">
-          <FileFilled className="mx-0 my-auto text-lg" />
-          <Typography className="w-full overflow-hidden text-clip text-sm">
-            {data.name}
-          </Typography>
+        <Typography className="flex flex-1 flex-row items-center align-middle">
+          <FileFilled className="mx-0 my-3 text-xl py-2 flex self-center" />
+          <span className="flex self-center">{data.name}</span>
         </Typography>
       )}
       {isFolder && (
-        <Typography className="flex h-full flex-1 align-middle ">
-          <NextLink href={`/explore?id=${data.id}`}>
-            <a className="mx-2 my-0 flex flex-row">
-              <FolderTwoTone className="mx-0 my-3 text-xl" />
-              <Typography className="hidden w-full text-ellipsis text-sm">
-                {data.name}
-              </Typography>
-            </a>
-          </NextLink>
-        </Typography>
+        <NextLink href={`/explore?id=${data.id}`}>
+          <a className="align-center h-full flex w-full flex-row mx-2 my-0 ">
+            <FolderTwoTone className="mx-0 my-3 text-xl py-2 flex self-center" />
+            <span className="flex self-center">{data.name}</span>
+          </a>
+        </NextLink>
       )}
     </Col>
   );

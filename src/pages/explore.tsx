@@ -102,12 +102,12 @@ const Page: React.FC<{ data: drive_v3.Schema$FileList }> = ({ data }) => {
   }, [Router]);
 
   return (
-    <Row className="mx-0 my-5 flex flex-col">
-      <Typography className="align-center w-full text-4xl font-bold ">
+    <Row className="mx-auto my-5 flex flex-col">
+      <Typography className="align-center w-full p-3 text-center text-4xl font-bold">
         Drive Manager
       </Typography>
       <List
-        className="mx-0 my-auto w-full max-w-3xl gap-2 p-1"
+        className="mx-auto my-0 w-full max-w-3xl gap-2 p-1"
         dataSource={files.files}
         grid={{ column: 1 }}
         renderItem={(item: drive_v3.Schema$File, i) => (
